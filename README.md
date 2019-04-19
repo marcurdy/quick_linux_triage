@@ -27,7 +27,7 @@ output:
 
 * True story.
 
-![](Smith1.png)
+![](assets/Smith1.png)
 
 # True Story Cont'd
 
@@ -69,7 +69,7 @@ output:
 # First we're going to need tools
 
 
-![](guns.gif)
+![](assets/guns.gif)
 
 |Tools|    |
 |-----|----|
@@ -146,13 +146,13 @@ PROMPT_COMMAND='history -a'
 
 * badguy[.]net has historically resolved to `45.xxx.xxx.xxx` so we'll start searching at Robtex
 
-![Source: Robtex](Robtex.png)
+![Source: Robtex](assets/Robtex.png)
 
 
 # First indicators
 
 
-![](1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-7.png)
+![](assets/1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-7.png)
 
 # Second Indicators
 
@@ -182,14 +182,14 @@ less badguy.txt
 # A brief pivot
 Attack graph...We've seen some stuff
 
-![Graph of attacker activities](attack.svg)
+![Graph of attacker activities](assets/attack.svg)
 
 
 # Cobalt Strike OSINT Profiling
 
 * The shodan report for `45.xxx.xxx.xxx` is pretty interesting
 
-![Shodan results for 45.xxx.xxx.xxx](ip_45_227_255_117_-_Shodan_Search.png)
+![Shodan results for 45.xxx.xxx.xxx](assets/ip_45_227_255_117_-_Shodan_Search.png)
 
 
 # Cobalt Strike OSINT Profiling CONT'd
@@ -224,7 +224,7 @@ Attack graph...We've seen some stuff
 
 # Cobalt Strike yara (JPCERT)
 
-![](1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-2.png)
+![](assets/1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-2.png)
 ```
 rule CobaltStrike_JPCERT {
                     strings:
@@ -241,7 +241,7 @@ vol.py -f memdump.mem --profile=Win2008R2SP1x64_23418 yarascan -y /tmp/cobalt.ya
 
 # Cobalt Strike JPCERT Plugin
 
-![](1__root_linanalyst1__10_2_28_4__-_byobu__ssh__and_2__jeffrey_beley_AMAC02T48THGTFM___Projects_document_word_cloud__bash_.png)
+![](assets/1__root_linanalyst1__10_2_28_4__-_byobu__ssh__and_2__jeffrey_beley_AMAC02T48THGTFM___Projects_document_word_cloud__bash_.png)
 
 ```bash
 vol.py --plugins=/plugings/cobalt -f memdump.mem --profile=Win2008R2SP1x64_23418 cobaltstrikeconfig -p 5352
@@ -269,14 +269,14 @@ amcache,filestat,mft,prefetch,recycle_bin_info2,winevtx,winiis
 ```
 
 
-![](1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-4.png)
+![](assets/1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-4.png)
 
 # Tradecraft tools
 
 * loki IOC scanner
   * Uses yara and logic to find attacker tools on disk
 
-![](1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-5.png)
+![](assets/1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-5.png)
 
 # Loki Sample findings
 
@@ -325,7 +325,7 @@ Targeted `scalpel.conf`
 * Installed by default on SIFT workstation and can be installed on OSX with `brew`
 
 
-![](Screenshot_4_15_19__8_21_AM.png)
+![](assets/Screenshot_4_15_19__8_21_AM.png)
 
 * We carved an 80GB image in just over 5 minutes
 
