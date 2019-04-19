@@ -75,7 +75,7 @@ output:
 |-----|----|
 | SSH Client | byobu ( terminal workflow enhancer ) |
 | imount ( exposing images ) | volatility ( memory analysis ) |
-| yara ( supercharged pattern matcher ) | * scalpel ( file carving ) |
+| yara ( supercharged pattern matcher ) | scalpel ( file carving ) |
 | loki (tradecraft hunting ) | plaso (timeline for targeted artifact pulls) |
 | other GNU tools |   |
 
@@ -130,8 +130,13 @@ PROMPT_COMMAND='history -a'
 
 > works with E01s VMDKS RAW bitlocker LVM
 
+```imount /path/to/VMDK```
 
-runs in foreground by default `^z` or use byobu
+* There are other options to change the default behavior, but the defaults work
+
+* Runs in foreground by default `^z` or use byobu
+
+* Will continue to run in background
 
 > NOTE: Userspace filesystems (NTFS, EWF, etc) are slow. Thus the need for
 > targeted collections.
@@ -139,13 +144,10 @@ runs in foreground by default `^z` or use byobu
 
 # Let's start hunting
 
-* badguy[.]net has historically resolved to `45.xxx.xxx.xxx` so we'll start
-  there
+* badguy[.]net has historically resolved to `45.xxx.xxx.xxx` so we'll start searching at Robtex
 
-![](Robtex.png)
+![Source: Robtex](Robtex.png)
 
-
-* Robtex is free and awesome
 
 # First indicators
 
@@ -154,10 +156,16 @@ runs in foreground by default `^z` or use byobu
 
 # Second Indicators
 
+
+
 If vmware snapshot, don't forget to convert to raw format
 
+```bash
+vol.py -f memdump.vmem --profile=Win2008R2SP1x64_23418 imagecopy -O memdump.mem
+```
 
-strings then strings again
+GNU strings then GNU strings again
+
 ```bash
 strings -o -el memdump.mem > memdump.txt
 strings -o  memdump.mem >> memdump.txt
@@ -165,7 +173,11 @@ egrep -iwF 'badguy.net|45.xxx.xxx.xxx' memdump.txt > badguy.txt
 less badguy.txt
 ```
 
-* Why do we have to run strings twice?
+* Why do we have to run GNU strings twice?
+
+* What are the arguments to egrep used?
+
+* Differences between Mac OS strings and GNU strings
 
 # A brief pivot
 Attack graph...We've seen some stuff
@@ -177,7 +189,7 @@ Attack graph...We've seen some stuff
 
 * The shodan report for `45.xxx.xxx.xxx` is pretty interesting
 
-![](ip_45_227_255_117_-_Shodan_Search.png)
+![Shodan results for 45.xxx.xxx.xxx](ip_45_227_255_117_-_Shodan_Search.png)
 
 
 # Cobalt Strike OSINT Profiling CONT'd
@@ -223,10 +235,17 @@ rule CobaltStrike_JPCERT {
 }
 ```
 
+```bash
+vol.py -f memdump.mem --profile=Win2008R2SP1x64_23418 yarascan -y /tmp/cobalt.yar
+```
 
 # Cobalt Strike JPCERT Plugin
 
 ![](1__root_linanalyst1__10_2_28_4__-_byobu__ssh__and_2__jeffrey_beley_AMAC02T48THGTFM___Projects_document_word_cloud__bash_.png)
+
+```bash
+vol.py --plugins=/plugings/cobalt -f memdump.mem --profile=Win2008R2SP1x64_23418 cobaltstrikeconfig -p 5352
+```
 
 * Now included in `docker pull jbeley/loki`
 
@@ -289,7 +308,7 @@ sys     0m0.040s
 ```
 
 
-# Checking for packaging
+# Checking for packaging in preparation for exfiltration
 
 * scalpel
 
@@ -317,7 +336,7 @@ Targeted `scalpel.conf`
 |------------|---------|
 | zgrep for zip | `unzip -p zipfile.zip |grep -F -f keywords.txt` |
 | zgrep for 7z | `7za x -so |grep -F -f keywords.txt` |
-| Poor man's paralell | `|xargs -P 8 command` |
+| Poor man's parallel | `|xargs -P 8 command` |
 | Find files | `find /mounted/directory -iname "*PF" -ls ` |
 | syncing files | `rsync --inplace  --partial --progress --stats  -avz YOURUSERID@sftp.nunya.biz:/jails/CASENAME/upload/ /LOCAL/` |
 | Listing 7z | `7za l FILENAME.7z` |
