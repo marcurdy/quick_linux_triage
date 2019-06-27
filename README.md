@@ -35,7 +35,7 @@ Mutated by Mark McCurdy for North Texas Cyber
 
 # Badguy[.]net call from FBI  
 
-<img src="assets/Smith1.png" width="200" />
+![](assets/Smith1.png | width=200)
 
 # Always the true story for all corporations
 
@@ -78,8 +78,8 @@ Mutated by Mark McCurdy for North Texas Cyber
 
 # First we're going to need tools, but not lots of tools
 Wick and Neo were correct.
-<img src="assets/matrixguns.gif" width="400" />
-<img src="assets/jw3.gif" width="400" />
+![](assets/matrixguns.gif | width=400)
+![](assets/jw3.gif | width=400)
 
 |Tools|    |
 |-----|----|
