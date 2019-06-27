@@ -1,6 +1,6 @@
 
 ---
-title:  Quick incident triage with Linux from the bar, airplane, or ...  
+### title:  Quick incident triage with Linux from the bar, airplane, or ...  
 author: Jeff Beley @jbeley  
 date: 01-APR-2019  
 Mutated by Mark McCurdy for North Texas Cyber
@@ -21,11 +21,23 @@ Mutated by Mark McCurdy for North Texas Cyber
 * Github: [github.com/marcurdy](https://github.com/marcurdy)
 
 
+# About Jeff Beley
+
+* OSS Evangelist
+
+* The nosiest guy on your network
+
+* docker fanatic
+
+* Twitter: [\@jbeley](https://twitter.com/jbeley)
+
+
+
 # Badguy[.]net call from FBI  
 
 <img src="assets/Smith1.png" width="200" />
 
-# True Story as told using The Matrix characters
+# Always the true story for all corporations
 
 * Agent Smith calls $CLIENT stating they have a machine talking to badguy[.]net
   * No other information is typically given by the FBI  
