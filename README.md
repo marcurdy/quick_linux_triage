@@ -1,45 +1,43 @@
 
 ---
-title:  Quick incident triage with Linux from the bar, or the airplane, or ...
-author: Jeff Beley @jbeley
-date: 01-APR-2019
-output:
-  slidy_presentation:
-    highlight: zenburn
-    incremental: true
-    footer: Accenture Security
-    fig_caption: true
+title:  Quick incident triage with Linux from the bar, airplane, or ...  
+author: Jeff Beley @jbeley  
+date: 01-APR-2019  
+Mutated by Mark McCurdy for North Texas Cyber
+
 
 ---
 
 # About me
 
-* OSS Evangelist
+* Nose to the monitor type of guy. Get to the point.
 
-* The nosiest guy on your network
+* Keep notes and make docs on anything of importance
 
-* docker fanatic
+* Give me anything that runs bash with GNU tools
 
-* [\@jbeley](https://twitter.com/jbeley)
+* Twitter: [\@marcurdy](https://twitter.com/marcurdy)
+
+* Github: [github.com/marcurdy](https://github.com/marcurdy)
 
 
-# Badguy[.]net call from FBI
+# Badguy[.]net call from FBI  
 
-* True story.
+<img src="assets/Smith1.png" width="200" />
 
-![](assets/Smith1.png)
+# True Story as told using The Matrix characters
 
-# True Story Cont'd
+* Agent Smith calls $CLIENT stating they have a machine talking to badguy[.]net
+  * No other information is typically given by the FBI  
 
-* Agent Smith calls $CLIENT. Stating they have a machine talking to badguy[.]net
-  * No other information is typically given by the FBI
 
-* $CLIENT has massive ransomware outbreak
-  * Indicating full domain compromise
+* $CLIENT finds a massive ransomware outbreak
+  * Files across many hosts start self-encrypting
+  * Is this a full domain compromise?
+  * You don't get to execute on that many machines without credentials
 
-> You don't get to execute on that many machines without credentials
 
-* $CLIENT calls us to unravel the puzzle
+* $CLIENT calls us to unravel the puzzle and save the company from ruin
 
 
 # What are we hunting for most often
@@ -56,42 +54,39 @@ output:
 
 > - psexec
 
-> - RDP
+> - RDP sessions from the internet? From within your company?
 
 > - *Packaging of data in preparation for exfiltration*
 
-> - Executition of 7-zip, rar, zip compression utlities to package data
+> - Executition of 7-zip, rar, zip compression utilities to package data
 
-> - On disk artifacts
-
-
-
-# First we're going to need tools
+> - On disk artifacts that tell the story and create a timeline
 
 
-![](assets/guns.gif)
+
+# First we're going to need tools, but not lots of tools
+Wick and Neo were correct.
+<img src="assets/matrixguns.gif" width="400" />
+<img src="assets/jw3.gif" width="400" />
 
 |Tools|    |
 |-----|----|
-| SSH Client | byobu ( terminal workflow enhancer ) |
-| imount ( exposing images ) | volatility ( memory analysis ) |
-| yara ( supercharged pattern matcher ) | scalpel ( file carving ) |
-| loki (tradecraft hunting ) | plaso (timeline for targeted artifact pulls) |
-| other GNU tools |   |
+| Linux Client because "GNU" | CyLR (artifact gathering)
+| plaso (timeline for targeted artifact pulls) | volatility (memory analysis) |
+| yara ( supercharged pattern matcher ) | loki (tradecraft hunting) |  |
+| imount ( exposing disk images) | scalpel ( file carving ) |
 
 > Total cost: 0$
 
-> *No dongles required*
+> *No big box e-discovery dongles required*
 
 # SSH Client
-* [JuiceSSH - SSH Client for Android](https://juicessh.com/)
-* [ConnectBot - OpenSource SSH Client for Android](https://connectbot.org/)
-* [Terminus - Commercial SSH Client for iOS and others](https://www.termius.com/)
+* The Genuine OpenSSH client built into Linux and MacOS
 * [Putty - SSH Client for Windows](https://www.chiark.greenend.org.uk/~sgtatham/putty/)
-* [iTerm2 (not really an SSH client, but an amazing terminal emulator)](https://www.iterm2.com/)
+* [iTerm2 for MacOS (not an SSH client but an amazing terminal emulator)](https://www.iterm2.com/)
 
 
-# Worfkflow Enhancers
+# Workflow Enhancers
 
 * byobu
 
@@ -101,14 +96,13 @@ output:
   * installable via `apt-get` or `brew`
   * Japanese for folding screen
 
-
 * GNU Screen
 
   * more ubiquious than byobu
   * no automated status bar
   * installable via `apt-get` or `brew`
 
-# Worfkflow Enhancers CONT'd
+# Workflow Enhancers CONT'd
 
 * A timestamped bash history file (customization of /etc/bash.bashrc)
 
@@ -128,18 +122,14 @@ PROMPT_COMMAND='history -a'
 
 * imount
 
-> works with E01s VMDKS RAW bitlocker LVM
+> works with E01s, VMDKS, RAW, bitlocker, LVM
 
 ```imount /path/to/VMDK```
 
 * There are other options to change the default behavior, but the defaults work
 
-* Runs in foreground by default `^z` or use byobu
-
-* Will continue to run in background
-
-> NOTE: Userspace filesystems (NTFS, EWF, etc) are slow. Thus the need for
-> targeted collections.
+> NOTE: Userspace filesystems (NTFS, EWF, etc) are slow.  
+> Targeted collections over full disk capture enable quick triage
 
 
 # Let's start hunting
@@ -151,19 +141,22 @@ PROMPT_COMMAND='history -a'
 
 # First indicators
 
+We ask for a memory capture from an infected host known to be infected.  
+* Easy way
+* Hard way
+
+As an Incident Responder, we can query anything using volatility  
 
 ![](assets/1__root_linanalyst1__10_2_28_4__-_byobu__ssh_-7.png)
 
 # Second Indicators
 
-
-
-If vmware snapshot, don't forget to convert to raw format
+Suspect patient zero is a VM. It was suspended not stopped. Why?  
+Memory is stored in a single file
 
 ```bash
 vol.py -f memdump.vmem --profile=Win2008R2SP1x64_23418 imagecopy -O memdump.mem
 ```
-
 GNU strings then GNU strings again
 
 ```bash
@@ -182,39 +175,45 @@ less badguy.txt
 # A brief pivot
 Attack graph...We've seen some stuff
 
+Possible Tools for visualization include
+* Splunk (restricted but free license)
+* Elastic
+* Microsoft's PowerBI, really
+
 ![Graph of attacker activities](assets/attack.svg)
 
 
-# Cobalt Strike OSINT Profiling
+# Cobalt Strike OSINT Profiling with Shodan.io
 
-* The shodan report for `45.xxx.xxx.xxx` is pretty interesting
+* The Shodan report for `45.xxx.xxx.xxx` is pretty interesting.
 
 ![Shodan results for 45.xxx.xxx.xxx](assets/ip_45_227_255_117_-_Shodan_Search.png)
 
 
 # Cobalt Strike OSINT Profiling CONT'd
 * HTTP or HTTPS open returning error code 404
-  * generally running nginx but sometimes Apache
+  * generally running nginx but sometimes Apache httpd
 * SSH on Ubuntu
-* RDP open with a hostname matching WIN-(randomish string), possible a NAT to a windows box elsewhere, or likely a VirtualBox VM running Windows
+* RDP open with a hostname matching a generic WIN-(randomish string)  
+Possible NAT to a windows box elsewhere or a VirtualBox VM running Windows
 * ngrok tunneling service
 * SMB
 * winrm
 
-> Shodan FTW
+> Protip: For a double Shodan win, their black friday sale is criminally cheap
 
-## If you have greater visiblity
+## If you have greater visibility (Passive DNS+ service)
 
-* SSL Cert with SHA-1 hash `6ece5ece4192683d2d84e25b0ba7e04f9cb7eb7c`
+* Default Cobalt Strike SSL Cert with SHA-1 hash `6ece5ece4192683d2d84e25b0ba7e04f9cb7eb7c`
 * SSL Certs with no locality information
 
 
 # Based on the OSINT
 
-* Probably Cobalt Strike
+* Probably Cobalt Strike. Follow this lead
 
 
-# volatility
+# Back to volatility to further inspect memory
   * yarascan
   * cobalt strike plugin
   * strings
@@ -247,7 +246,7 @@ vol.py -f memdump.mem --profile=Win2008R2SP1x64_23418 yarascan -y /tmp/cobalt.ya
 vol.py --plugins=/plugings/cobalt -f memdump.mem --profile=Win2008R2SP1x64_23418 cobaltstrikeconfig -p 5352
 ```
 
-* Now included in `docker pull jbeley/loki`
+* This yara definition is included in `docker pull jbeley/loki`
 
 # Lateral movement
 * Memory
@@ -281,14 +280,18 @@ amcache,filestat,mft,prefetch,recycle_bin_info2,winevtx,winiis
 # Loki Sample findings
 
 ```
-○ Plain text, weakly encrypted (AES-32) . Looks like the local admin password (which was cracked in 0.068 secs) was  xxxxxxx
-	§ FILE: /data/System Volume Information/DFSR/Private/XXXXXXXXXXXXXXXXXXXXXXXX.xml SCORE: 50 TYPE: XML SIZE: 560
+○ Plain text, weakly encrypted (AES-32) . Looks like the local admin password (which was cracked in 0.068 secs) was  xxxxxxx  
+§ FILE: /data/System Volume Information/DFSR/Private/XXXXXXXXXXXXXXXXXXXXXXXX.xml SCORE: 50 TYPE: XML SIZE: 560
 FIRST_BYTES: xxxxxxxxx / <?xml version="1.0"
 MD5: xxxxxxxxxxxxxxxxxxx
 SHA1: xxxxxxxxxxxxxxxxxxx
-SHA256: xxxxxxxxxxxxxxxxxxx CREATED: Tue Mar 15 14:43:10 2016 MODIFIED: Thu Nov  8 03:03:44 2012 ACCESSED: Wed Nov  7 20:02:55 2012
+SHA256: xxxxxxxxxxxxxxxxxxx   
+CREATED: Tue Mar 15 14:43:10 2016  
+MODIFIED: Thu Nov  8 03:03:44 2012  
+ACCESSED: Wed Nov  7 20:02:55 2012
 REASON_1: Yara Rule MATCH: Groups_cpassword SUBSCORE: 50
-DESCRIPTION: Groups XML contains cpassword value, which is decrypted password - key is in MSDN http://goo.gl/mHrC8P REF: http://www.grouppolicy.biz/2013/11/why-passwords-in-group-policy-preference-are-very-bad/
+DESCRIPTION: Groups XML contains cpassword value, which is decrypted password - key is in MSDN http://goo.gl/mHrC8P  
+REF: http://www.grouppolicy.biz/2013/11/why-passwords-in-group-policy-preference-are-very-bad/  
 MATCHES: Str1:  cpassword="L Str2:  changeLogon= Str3:  description= Str4:  acctDisabled=
 
 ```
@@ -296,7 +299,7 @@ MATCHES: Str1:  cpassword="L Str2:  changeLogon= Str3:  description= Str4:  acct
 * Why is this bad?
 
 
-* Using  gpprefdecrypt.py
+* Ease of using gpprefdecrypt.py
 
 ```
 time python gpprefdecrypt.py xxxxxxxx
@@ -312,7 +315,7 @@ sys     0m0.040s
 
 * scalpel
 
-Targeted `scalpel.conf`
+Using a customized `scalpel.conf` to define the file headers to seek
 
 
 ```
@@ -324,12 +327,9 @@ Targeted `scalpel.conf`
 
 * Installed by default on SIFT workstation and can be installed on OSX with `brew`
 
-
-![](assets/Screenshot_4_15_19__8_21_AM.png)
-
 * We carved an 80GB image in just over 5 minutes
 
-> - Why are carved zip files more likely to be complete using this process?
+* Why are carved zip files more likely to be complete using this process?
 
 # Cheatsheets
 | Descrption | Command |
