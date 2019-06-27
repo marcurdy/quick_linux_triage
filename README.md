@@ -35,7 +35,7 @@ Mutated by Mark McCurdy for North Texas Cyber
 
 # Badguy[.]net call from FBI  
 
-![](assets/Smith1.png | width=200)
+![](https://raw.githubusercontent.com/marcurdy/quick_linux_triage/master/assets/Smith1.png?v=4&s=400)
 
 # Always the true story for all corporations
 
@@ -78,8 +78,8 @@ Mutated by Mark McCurdy for North Texas Cyber
 
 # First we're going to need tools, but not lots of tools
 Wick and Neo were correct.
-![](assets/matrixguns.gif | width=400)
-![](assets/jw3.gif | width=400)
+![](https://raw.githubusercontent.com/marcurdy/quick_linux_triage/master/assets/matrixguns.gif?v=4&s=400)
+![](https://raw.githubusercontent.com/marcurdy/quick_linux_triage/master/assets/jw3.gif?v=4&s=400)
 
 |Tools|    |
 |-----|----|
