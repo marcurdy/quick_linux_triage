@@ -77,7 +77,7 @@ Mutated by Mark McCurdy for North Texas Cyber
 
 
 # First we're going to need tools, but not lots of tools
-Wick and Neo were correct.
+
 <img src=https://raw.githubusercontent.com/marcurdy/quick_linux_triage/master/assets/matrixguns.gif width=400>
 <img src=https://raw.githubusercontent.com/marcurdy/quick_linux_triage/master/assets/jw3.gif width=400>
 
