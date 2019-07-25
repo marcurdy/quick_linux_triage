@@ -261,13 +261,13 @@ vol.py --plugins=/plugings/cobalt -f memdump.mem --profile=Win2008R2SP1x64_23418
 * This yara definition is included in `docker pull jbeley/loki`
 
 # Lateral movement
-* Memory
-* evtx logs
-* prefetch
+* Pull Memory
+* Windows Event (evtx) logs
+* Windows prefetch artifacts
 
-# Plaso
+# Plaso for making a timeline out of most any Windows artifacts
 
-* plaso
+* We can send this to plaso and walk through it chronologically
     * Event logs
     * Prefetch
     * MFT/filestat
